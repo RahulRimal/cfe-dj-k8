@@ -17,7 +17,7 @@ jobs:
     needs: [test_django_job]
     env:
       DJANGO_SECRET_KEY: super-secret-key
-      CLUSTER_NAME: django-k8s
+      CLUSTER_NAME: cfe-k8s
 
     steps:
       - name: Checkout code
