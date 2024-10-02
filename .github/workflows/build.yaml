@@ -11,6 +11,7 @@ on:
 jobs:
   test_django_job:
     uses: RahulRimal/cfe-dj-k8/.github/workflows/test-django.yaml@main
+
   build:
     runs-on: ubuntu-latest
     needs: [test_django_job]
@@ -19,7 +20,8 @@ jobs:
 
     steps:
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -28,12 +30,12 @@ jobs:
       - name: Login to DO Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
 
-      - name: Build container imag
+      - name: Build container image
         working-directory: ./web
         run: |
           docker build -f Dockerfile \
           -t registry.digitalocean.com/cfe-k8ss/django-k8s-web:latest \
-          -t registry.digitalocean.com/cfe-k8ss/django-k8s-web:{GITHUB_SHA::7} .
+          -t registry.digitalocean.com/cfe-k8ss/django-k8s-web:${{ github.sha::7 }} .
 
       - name: Push image to DO Container Registry
         run: |
