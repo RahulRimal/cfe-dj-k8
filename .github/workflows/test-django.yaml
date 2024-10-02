@@ -16,11 +16,11 @@ jobs:
         working-directory: ./web
     env:
       DJANGO_SECRET_KEY: super-secret-key
-      POSTGRES_DB=defaultdb
-      POSTGRES_PASSWORD=AVNS_uG5K0L8nwb7wjsW1JiD
-      POSTGRES_USER=doadmin
-      POSTGRES_HOST=private-django-k8s-db-postgresql-do-user-17927650-0.h.db.ondigitalocean.com
-      POSTGRES_PORT=25060
+      POSTGRES_DB: defaultdb
+      POSTGRES_PASSWORD: AVNS_uG5K0L8nwb7wjsW1JiD
+      POSTGRES_USER: doadmin
+      POSTGRES_HOST: private-django-k8s-db-postgresql-do-user-17927650-0.h.db.ondigitalocean.com
+      POSTGRES_PORT: 25060
     services:
       postgres_main:
         image: postgres:16
@@ -54,4 +54,3 @@ jobs:
       - name: Test with Django
         run: |
           python manage.py test
-
