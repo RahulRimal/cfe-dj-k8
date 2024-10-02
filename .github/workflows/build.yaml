@@ -41,15 +41,19 @@ jobs:
       - name: Push image to DO Container Registry
         run: |
           docker push registry.digitalocean.com/cfe-k8ss/django-k8s-web --all-tags
+
       - name: Grab K8s cluster config file with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ env.CLUSTER_NAME }}
+
       - name: Update deployment image
         run: |
           kubectl set image deployment/django-k8s-web-deployment django-k8s-web=registry.digitalocean.com/cfe-k8ss/django-k8s-web:${GITHUB_SHA::7}
-      -name: Wait for rollout to finish
+
+      - name: Wait for rollout to finish
         run: |
           kubectl rollout status deployment/django-k8s-web-deployment
-      - name: Migrate database Command
+
+      - name: Migrate database
         run: |
           export SINGLE_RUNNING_POD=$(kubectl get pods -l app=django-k8s-web-deployment -o jsonpath='{.items[0].metadata.name}')
-          kubectl exec -it $SINGLE_RUNNING_POD -- bash /app/migrage.sh
+          kubectl exec -it $SINGLE_RUNNING_POD -- bash /app/migrate.sh
